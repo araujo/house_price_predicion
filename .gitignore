@@ -10,7 +10,6 @@ __pycache__/
 venv/
 
 # Data & artifacts
-data/
 model/
 mlflow_data/
 
