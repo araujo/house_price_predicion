@@ -1,0 +1,477 @@
+{
+  "report_version": "1.0",
+  "timestamp_utc": "2026-03-24T17:55:20.619359+00:00",
+  "quality": {
+    "ok": true,
+    "errors": [],
+    "warnings": [
+      "kc_house: 353 rows have duplicate 'id' values (non-unique ids)"
+    ],
+    "n_kc_rows": 21613,
+    "n_demo_rows": 70
+  },
+  "data_drift": {
+    "kind": "data_drift",
+    "features": [
+      {
+        "feature": "bedrooms",
+        "ks_statistic": 0.052051080368296865,
+        "ks_pvalue": 0.936187288623376,
+        "psi": 0.1010402936668311,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "bathrooms",
+        "ks_statistic": 0.04262157035117753,
+        "ks_pvalue": 0.9898984261248626,
+        "psi": 0.07877606551985403,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "sqft_living",
+        "ks_statistic": 0.055449960671817844,
+        "ks_pvalue": 0.9012744613920072,
+        "psi": 0.09063054671023099,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "sqft_lot",
+        "ks_statistic": 0.07324989589598857,
+        "ks_pvalue": 0.6297938933374944,
+        "psi": 0.07843784213122305,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "floors",
+        "ks_statistic": 0.07251977976218016,
+        "ks_pvalue": 0.642123786266392,
+        "psi": 0.02136821837507892,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "waterfront",
+        "ks_statistic": 0.002458242724286297,
+        "ks_pvalue": 1.0,
+        "psi": 0.0,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "view",
+        "ks_statistic": 0.03291306158330631,
+        "ks_pvalue": 0.9997850263114645,
+        "psi": 0.0,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "condition",
+        "ks_statistic": 0.009346226807939666,
+        "ks_pvalue": 1.0,
+        "psi": 0.08566291504718986,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "grade",
+        "ks_statistic": 0.02668717901263129,
+        "ks_pvalue": 0.9999984995556778,
+        "psi": 0.019055134905482878,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "sqft_above",
+        "ks_statistic": 0.06948410678758155,
+        "ks_pvalue": 0.6933467259828168,
+        "psi": 0.0692382970867473,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "sqft_basement",
+        "ks_statistic": 0.10316106047286355,
+        "ks_pvalue": 0.22183617391883018,
+        "psi": 0.07331389905829784,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "yr_built",
+        "ks_statistic": 0.06674640262804798,
+        "ks_pvalue": 0.7388701413491479,
+        "psi": 0.06198316430902492,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "yr_renovated",
+        "ks_statistic": 0.021323740341461117,
+        "ks_pvalue": 0.9999999995503089,
+        "psi": 0.0,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "lat",
+        "ks_statistic": 0.1600495072410124,
+        "ks_pvalue": 0.010509482049607862,
+        "psi": 0.12393990276048503,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "long",
+        "ks_statistic": 0.1737792069587748,
+        "ks_pvalue": 0.004123459474481614,
+        "psi": 0.13279716954520993,
+        "drift": true,
+        "drift_reason": "ks_pvalue<0.01",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "sqft_living15",
+        "ks_statistic": 0.04729422107065192,
+        "ks_pvalue": 0.9709464904363886,
+        "psi": 0.055671580087901115,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "sqft_lot15",
+        "ks_statistic": 0.05097672696987926,
+        "ks_pvalue": 0.9454947772340336,
+        "psi": 0.05770046247363696,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "ppltn_qty",
+        "ks_statistic": 0.11630546430389122,
+        "ks_pvalue": 0.12339442894428754,
+        "psi": 0.2378271395257399,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "urbn_ppltn_qty",
+        "ks_statistic": 0.11630546430389122,
+        "ks_pvalue": 0.12339442894428754,
+        "psi": 0.1436492389779039,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "sbrbn_ppltn_qty",
+        "ks_statistic": 0.02543145329200025,
+        "ks_pvalue": 0.9999996514163293,
+        "psi": 0.0,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "farm_ppltn_qty",
+        "ks_statistic": 0.0212450839772359,
+        "ks_pvalue": 0.9999999996186701,
+        "psi": 0.0006589588934630692,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "non_farm_qty",
+        "ks_statistic": 0.11682505899227313,
+        "ks_pvalue": 0.12038936331588321,
+        "psi": 0.045312631329427346,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "medn_hshld_incm_amt",
+        "ks_statistic": 0.09862490167954469,
+        "ks_pvalue": 0.2670631356388853,
+        "psi": 0.08648553606101873,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "medn_incm_per_prsn_amt",
+        "ks_statistic": 0.10924443621894231,
+        "ks_pvalue": 0.17061435209994574,
+        "psi": 0.24281018744244637,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "hous_val_amt",
+        "ks_statistic": 0.08310877712487852,
+        "ks_pvalue": 0.4695369838972041,
+        "psi": 0.11686636861708843,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "edctn_less_than_9_qty",
+        "ks_statistic": 0.09163790311386666,
+        "ks_pvalue": 0.34917997740791173,
+        "psi": 0.14355527517268585,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "edctn_9_12_qty",
+        "ks_statistic": 0.08327534354323785,
+        "ks_pvalue": 0.4669930723094322,
+        "psi": 0.0847972265635872,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "edctn_high_schl_qty",
+        "ks_statistic": 0.07872114005459685,
+        "ks_pvalue": 0.5388427918092644,
+        "psi": 0.07001418056811382,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "edctn_some_clg_qty",
+        "ks_statistic": 0.0974038772960718,
+        "ks_pvalue": 0.2803131965442373,
+        "psi": 0.06645341947406476,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "edctn_assoc_dgre_qty",
+        "ks_statistic": 0.07815435154767969,
+        "ks_pvalue": 0.5480790640679838,
+        "psi": 0.0855337786958634,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "edctn_bchlr_dgre_qty",
+        "ks_statistic": 0.12540230416878728,
+        "ks_pvalue": 0.07886595707470297,
+        "psi": 0.23730731605084762,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "edctn_prfsnl_qty",
+        "ks_statistic": 0.15405450423356315,
+        "ks_pvalue": 0.015430201129354405,
+        "psi": 0.143633592540628,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "per_urbn",
+        "ks_statistic": 0.08357423772729378,
+        "ks_pvalue": 0.46244572527562045,
+        "psi": 0.09141040387453156,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "per_sbrbn",
+        "ks_statistic": 0.02543145329200025,
+        "ks_pvalue": 0.9999996514163293,
+        "psi": 0.0,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "per_farm",
+        "ks_statistic": 0.01456253180955902,
+        "ks_pvalue": 1.0,
+        "psi": 0.0,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "per_non_farm",
+        "ks_statistic": 0.08357423772729367,
+        "ks_pvalue": 0.4624457252756232,
+        "psi": 0.006155437525445237,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "per_less_than_9",
+        "ks_statistic": 0.07207884143802346,
+        "ks_pvalue": 0.6495757007218905,
+        "psi": 0.1060184686775171,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "per_9_to_12",
+        "ks_statistic": 0.06174293249433216,
+        "ks_pvalue": 0.8176156634102212,
+        "psi": 0.3590987620694083,
+        "drift": true,
+        "drift_reason": "psi>0.25",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "per_hsd",
+        "ks_statistic": 0.0805057141535187,
+        "ks_pvalue": 0.5101534892106501,
+        "psi": 0.08853254726216025,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "per_some_clg",
+        "ks_statistic": 0.08777587563040762,
+        "ks_pvalue": 0.40106620518548974,
+        "psi": 0.1535956235369035,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "per_assoc",
+        "ks_statistic": 0.03779762180169341,
+        "ks_pvalue": 0.997835274135662,
+        "psi": 0.1608530864663649,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "per_bchlr",
+        "ks_statistic": 0.07361356590940638,
+        "ks_pvalue": 0.6236598372163706,
+        "psi": 0.11910201293253098,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      },
+      {
+        "feature": "per_prfsnl",
+        "ks_statistic": 0.11303659834358948,
+        "ks_pvalue": 0.14373155256403625,
+        "psi": 0.08658487268037153,
+        "drift": false,
+        "drift_reason": "none",
+        "n_reference": 21613,
+        "n_current": 100
+      }
+    ],
+    "summary": {
+      "n_features_evaluated": 43,
+      "n_features_drift_flagged": 2,
+      "drift": true,
+      "ks_pvalue_threshold": 0.01,
+      "psi_alert_threshold": 0.25
+    }
+  },
+  "prediction_drift": {
+    "kind": "prediction_drift",
+    "skipped": false,
+    "summary_stats": {
+      "baseline_mean": 540088.1417665294,
+      "baseline_std": 367118.7031813723,
+      "current_mean": 491184.31328051095,
+      "current_std": 291670.60147996875,
+      "relative_mean_shift": 0.09054786562441994
+    },
+    "ks_statistic": 0.08918474991903019,
+    "ks_pvalue": 0.3816152770251525,
+    "drift": false,
+    "drift_reason": "none",
+    "n_baseline": 21613,
+    "n_current": 100
+  },
+  "model_performance": {
+    "kind": "model_performance",
+    "status": "skipped",
+    "reason": "no_labels_file_configured"
+  }
+}
