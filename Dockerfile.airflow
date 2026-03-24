@@ -1,0 +1,27 @@
+# Airflow: extend official image; install project for DAG imports (airflow_tasks, data_engineer, …).
+# Pip must run as user `airflow` (image policy). Root is only used for filesystem ownership.
+FROM apache/airflow:2.8.3-python3.11
+
+USER root
+WORKDIR /opt/airflow/project
+
+COPY pyproject.toml README.md ./
+COPY app ./app
+COPY data_engineer ./data_engineer
+COPY model_trainer ./model_trainer
+COPY monitor ./monitor
+COPY airflow_tasks ./airflow_tasks
+
+RUN chown -R airflow:root /opt/airflow/project
+
+USER airflow
+WORKDIR /opt/airflow/project
+
+# Editable install resolves [project].dependencies from pyproject.toml (pins NumPy<2, pandas 2.1.x, etc.).
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -e . && \
+    pip install --no-cache-dir "psycopg2-binary>=2.9.0,<3.0"
+
+ENV PYTHONPATH=/opt/airflow/project
+
+# DAGs are mounted at runtime from ./dags (see docker-compose.yml).

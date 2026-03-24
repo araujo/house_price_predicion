@@ -1,0 +1,9 @@
+# Application settings (reference — primary source is environment / pydantic Settings).
+app:
+  name: house-price-prediction
+  environment: development
+
+paths:
+  data_raw: data/raw
+  data_processed: data/processed
+  model_dir: model

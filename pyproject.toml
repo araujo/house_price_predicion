@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "house-price-prediction"
+version = "0.1.0"
+description = "Seattle house price prediction — MLOps scaffold"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115,<1.0",
+    "uvicorn[standard]>=0.32,<1.0",
+    "pydantic>=2.10,<3.0",
+    "pydantic-settings>=2.6,<3.0",
+    "numpy>=1.26,<2.0",
+    "pandas>=2.1,<2.2",
+    "scikit-learn>=1.4,<1.5",
+    "scipy>=1.10,<1.13",
+    "pyarrow>=14,<16",
+    "mlflow>=3.5,<4.0",
+    "pyyaml>=6.0,<7.0",
+    "joblib>=1.4,<2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "httpx>=0.27.0",
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "ruff>=0.8.0",
+]
+airflow = [
+    "apache-airflow>=2.8.0,<3",
+]
+mlflow = [
+    "mlflow>=3.5,<4.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*", "data_engineer*", "model_trainer*", "monitor*", "airflow_tasks*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["app", "tests", "scripts", "data_engineer", "model_trainer", "monitor", "airflow_tasks", "dags"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"

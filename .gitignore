@@ -1,0 +1,37 @@
+cat <<EOF > .gitignore
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual env
+.venv/
+venv/
+
+# Data & artifacts
+data/
+model/
+mlflow_data/
+
+# Airflow
+logs/
+airflow.db
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Env
+.env
+EOF
+
+# Egg info
+house_price_prediction.egg-info/
+
+# MLflow
+mlflow.db
+mlruns

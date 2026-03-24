@@ -1,0 +1,25 @@
+# House price model training (Phase 4)
+target: price
+
+full_feature_columns: []
+minimal_feature_columns: []
+
+training:
+  random_state: 42
+  test_size: 0.2
+  reference_year: 2015
+  experiment_name: house_price
+  registered_model_name: house_price_regressor
+  cv_folds: 0
+  artifact_subdir: model
+  # In Docker Compose, MLflow URI is set via HPP_MLFLOW_TRACKING_URI (see docker-compose.yml).
+  # Local host training can use: mlflow_tracking_uri: http://127.0.0.1:5000
+  models:
+    - name: baseline_knn
+      target_mode: plain
+    - name: hist_gradient_boosting
+      target_mode: log1p
+    - name: random_forest
+      target_mode: log1p
+    - name: extra_trees
+      target_mode: log1p

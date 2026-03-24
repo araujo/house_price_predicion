@@ -1,0 +1,80 @@
+# Continuous delivery: build container images after successful CI on main, or manually.
+# Push to a registry is intentionally a placeholder — add GHCR/ECR auth and push when ready.
+name: CD
+
+on:
+  # Runs after the "CI" workflow completes successfully (see job filter below).
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-images:
+    runs-on: ubuntu-latest
+    # Manual run: always. Automated: only when CI succeeded for a push to main (not PR-only CI).
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_branch == 'main')
+    steps:
+      - name: Checkout at CI commit (automated)
+        if: github.event_name == 'workflow_run'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Checkout main (manual dispatch)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      # Full SHA is the immutable tag; short SHA is human-readable; latest is a moving pointer on main.
+      - name: Compute image tags from checked-out commit
+        id: meta
+        run: |
+          echo "full_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "short_sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Build FastAPI image
+        run: |
+          docker build -f Dockerfile.fastapi \
+            -t house-price-api:${{ steps.meta.outputs.full_sha }} \
+            -t house-price-api:sha-${{ steps.meta.outputs.short_sha }} \
+            -t house-price-api:latest \
+            .
+
+      - name: Build MLflow image
+        run: |
+          docker build -f Dockerfile.mlflow \
+            -t house-price-mlflow:${{ steps.meta.outputs.full_sha }} \
+            -t house-price-mlflow:sha-${{ steps.meta.outputs.short_sha }} \
+            -t house-price-mlflow:latest \
+            .
+
+      - name: Build Airflow image
+        run: |
+          docker build -f Dockerfile.airflow \
+            -t house-price-airflow:${{ steps.meta.outputs.full_sha }} \
+            -t house-price-airflow:sha-${{ steps.meta.outputs.short_sha }} \
+            -t house-price-airflow:latest \
+            .
+
+      - name: Placeholder — push to registry
+        run: |
+          echo "Images tagged with full SHA (immutable), sha-<short> (readable), and latest."
+          echo "Example: house-price-api:${{ steps.meta.outputs.full_sha }}"
+          echo "To promote to production:"
+          echo "  1. Create a registry repository (e.g. ghcr.io/${{ github.repository_owner }}/<name>)."
+          echo "  2. Add secrets: REGISTRY_USERNAME, REGISTRY_PASSWORD or use OIDC + docker/login-action."
+          echo "  3. docker push each image with the SHA tag for traceability and :latest for convenience on main only."
+
+      - name: Placeholder — deploy to environment
+        run: |
+          echo "No deploy target is configured. Wire this step to Kubernetes, ECS, or VM updates"
+          echo "using your orchestrator (Helm, Terraform, etc.) when a registry and cluster exist."
