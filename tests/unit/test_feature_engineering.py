@@ -5,8 +5,8 @@ import pandas as pd
 import pytest
 from data_engineer.constants import ENGINEERED_FEATURE_COLUMNS, ZIPCODE_DEMOGRAPHICS_COLUMNS
 from data_engineer.feature_engineering import (
-    FeatureMetadata,
     ZIPCODE_MODEL_CSV_DTYPE,
+    FeatureMetadata,
     build_sklearn_preprocessing_pipeline,
     get_feature_metadata,
     get_final_feature_column_names,
