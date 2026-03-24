@@ -13,7 +13,11 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
-from data_engineer.feature_engineering import transform_to_model_features
+from data_engineer.feature_engineering import (
+    ZIPCODE_MODEL_CSV_DTYPE,
+    prepare_model_input_for_prediction,
+    transform_to_model_features,
+)
 from data_engineer.ingestion import load_future_unseen_examples_dataframe
 from data_engineer.preprocessing import merge_demographics_by_zipcode
 from data_engineer.validation import (
@@ -64,7 +68,7 @@ def merge_inference_with_demographics() -> str:
 
 def engineer_batch_features(merged_csv_path: str) -> str:
     """Phase 3 feature matrix (same transform as training / API)."""
-    merged = pd.read_csv(merged_csv_path)
+    merged = pd.read_csv(merged_csv_path, dtype=ZIPCODE_MODEL_CSV_DTYPE)
     year = config.feature_reference_year()
     X = transform_to_model_features(
         merged,
@@ -83,8 +87,8 @@ def load_model_score_and_write(merged_csv_path: str, feature_csv_path: str) -> d
     from app.core.config import Settings
     from app.services.model_registry import ModelRegistryService
 
-    merged = pd.read_csv(merged_csv_path)
-    X = pd.read_csv(feature_csv_path)
+    merged = pd.read_csv(merged_csv_path, dtype=ZIPCODE_MODEL_CSV_DTYPE)
+    X = pd.read_csv(feature_csv_path, dtype=ZIPCODE_MODEL_CSV_DTYPE)
     raw = config.raw_data_dir()
     out = config.batch_output_path()
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -105,6 +109,7 @@ def load_model_score_and_write(merged_csv_path: str, feature_csv_path: str) -> d
     settings = Settings(**settings_kw)
     reg = ModelRegistryService(settings)
     loaded = reg.get()
+    X = prepare_model_input_for_prediction(X, logger=logger)
     preds = loaded.pipeline.predict(X)
     df_out = pd.DataFrame({"predicted_price": preds.ravel()}, index=merged.index)
     if "zipcode" in merged.columns:

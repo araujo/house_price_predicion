@@ -7,6 +7,7 @@ send demographic columns; enrichment stays internal to avoid training-serving sk
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from typing import Any
 
@@ -29,6 +30,9 @@ from data_engineer.constants import (
 from data_engineer.preprocessing import build_feature_dataframe
 
 _NUMERIC_EPS = 1e-9
+
+# Preserve sklearn categorical contract when reading model matrices from CSV (pandas infers int).
+ZIPCODE_MODEL_CSV_DTYPE: dict[str, type] = {"zipcode": str}
 
 
 @dataclass(frozen=True)
@@ -174,6 +178,41 @@ def _add_engineered_features(df: pd.DataFrame, *, reference_year: int) -> pd.Dat
 
 def _ensure_zipcode_string(series: pd.Series) -> pd.Series:
     return series.astype(str).str.replace('"', "", regex=False).str.strip()
+
+
+def prepare_model_input_for_prediction(
+    X: pd.DataFrame,
+    *,
+    metadata: FeatureMetadata | None = None,
+    logger: logging.Logger | None = None,
+) -> pd.DataFrame:
+    """
+    Align categorical dtypes with training before ``Pipeline.predict``.
+
+    CSV round-trips (e.g. batch ``batch_X.csv``) often re-parse ``zipcode`` as int64;
+    the fitted ``OneHotEncoder`` expects string categories for ``zipcode``.
+    """
+    meta = metadata or get_feature_metadata()
+    out = X.copy()
+    for col in meta.house_categorical_columns:
+        if col in out.columns and logger is not None:
+            logger.info(
+                "categorical feature dtype before coercion: %s=%s",
+                col,
+                out[col].dtype,
+            )
+    if "zipcode" in out.columns:
+        out["zipcode"] = (
+            out["zipcode"].fillna("").astype(str).str.replace('"', "", regex=False).str.strip()
+        )
+    for col in meta.house_categorical_columns:
+        if col in out.columns and logger is not None:
+            logger.info(
+                "categorical feature dtype after coercion: %s=%s",
+                col,
+                out[col].dtype,
+            )
+    return out
 
 
 def _fill_demographic_nulls(df: pd.DataFrame, demographic_columns: tuple[str, ...]) -> pd.DataFrame:

@@ -7,7 +7,11 @@ from typing import TYPE_CHECKING
 
 import pandas as pd
 from data_engineer.constants import INFERENCE_FULL_FEATURE_COLUMNS
-from data_engineer.feature_engineering import get_feature_metadata, transform_to_model_features
+from data_engineer.feature_engineering import (
+    get_feature_metadata,
+    prepare_model_input_for_prediction,
+    transform_to_model_features,
+)
 from data_engineer.ingestion import load_zipcode_demographics_dataframe
 from data_engineer.preprocessing import merge_demographics_by_zipcode
 from data_engineer.validation import normalize_zipcode_series
@@ -90,7 +94,7 @@ class FeatureService:
         if list(X.columns) != cols:
             logger.warning("Feature column order mismatch; reindexing to training contract")
             X = X.reindex(columns=cols)
-        return X
+        return prepare_model_input_for_prediction(X, metadata=meta, logger=logger)
 
     def feature_metadata_dict(self) -> dict:
         return get_feature_metadata().to_dict()

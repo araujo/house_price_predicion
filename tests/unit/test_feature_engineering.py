@@ -1,13 +1,16 @@
 """Tests for feature_engineering — engineered columns and train/infer contract."""
 
+import numpy as np
 import pandas as pd
 import pytest
 from data_engineer.constants import ENGINEERED_FEATURE_COLUMNS, ZIPCODE_DEMOGRAPHICS_COLUMNS
 from data_engineer.feature_engineering import (
     FeatureMetadata,
+    ZIPCODE_MODEL_CSV_DTYPE,
     build_sklearn_preprocessing_pipeline,
     get_feature_metadata,
     get_final_feature_column_names,
+    prepare_model_input_for_prediction,
     transform_to_model_features,
 )
 from data_engineer.preprocessing import load_inference_dataframe, load_training_dataframe
@@ -148,3 +151,24 @@ def test_geo_zip_bucket_deterministic(reference_year: int) -> None:
     out = transform_to_model_features(df, reference_year=reference_year)
     assert int(out["geo_zip_bucket"].iloc[0]) == 178
     assert int(out["geo_cluster_placeholder"].iloc[0]) == 0
+
+
+def test_prepare_model_input_coerces_int64_zipcode_to_string() -> None:
+    df = _minimal_merged_row()
+    X = transform_to_model_features(df, reference_year=2020)
+    X["zipcode"] = np.int64(98118)
+    out = prepare_model_input_for_prediction(X)
+    assert out["zipcode"].iloc[0] == "98118"
+
+
+def test_batch_x_csv_roundtrip_preserves_zipcode_as_string(tmp_path) -> None:
+    df = _minimal_merged_row()
+    X = transform_to_model_features(df, reference_year=2020)
+    path = tmp_path / "batch_X.csv"
+    X.to_csv(path, index=False)
+    raw = pd.read_csv(path)
+    assert raw["zipcode"].dtype in (np.dtype("int64"), np.dtype("int32"))
+    fixed = pd.read_csv(path, dtype=ZIPCODE_MODEL_CSV_DTYPE)
+    assert str(fixed["zipcode"].dtype) in ("object", "string")
+    prepared = prepare_model_input_for_prediction(fixed)
+    assert prepared["zipcode"].iloc[0] == X["zipcode"].iloc[0]
