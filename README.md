@@ -217,6 +217,6 @@ docker compose logs -f api
 - feature store  
 - CI/CD  
 
-## 15. Architecture Deatil
+## 15. Architecture Details
 
-You can find the architecture detail [here](/docs/architecture.md)
+You can find the architecture details [here](/docs/architecture.md)
