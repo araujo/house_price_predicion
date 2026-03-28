@@ -5,6 +5,9 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
+import mlflow
+from mlflow.tracking import MlflowClient
+
 logger = logging.getLogger(__name__)
 
 
@@ -19,8 +22,6 @@ def register_model_from_uri(
 
     Prefer this over guessing ``runs:/.../path`` so nested runs resolve correctly.
     """
-    import mlflow
-
     if tracking_uri:
         mlflow.set_tracking_uri(tracking_uri)
 
@@ -52,9 +53,6 @@ def set_registry_tags(
     tracking_uri: str | None = None,
 ) -> None:
     """Attach tags to a run (e.g. ``best_model: true``)."""
-    import mlflow
-    from mlflow.tracking import MlflowClient
-
     if tracking_uri:
         mlflow.set_tracking_uri(tracking_uri)
     client = MlflowClient()

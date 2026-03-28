@@ -93,9 +93,7 @@ def compute_data_drift_report(
             psi_val = compute_psi(ref_a, cur_a)
         ks_drift = bool(ks.pvalue < ks_pvalue_threshold)
         psi_drift = bool(
-            include_psi
-            and not math.isnan(psi_val)
-            and psi_val > psi_alert_threshold,
+            include_psi and not math.isnan(psi_val) and psi_val > psi_alert_threshold,
         )
         rows.append(
             {

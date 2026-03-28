@@ -10,6 +10,13 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 
 from airflow.decorators import dag, task
+from airflow_tasks.batch_scoring import (
+    engineer_batch_features,
+    load_model_score_and_write,
+    merge_inference_with_demographics,
+    summarize_batch_run,
+    validate_inference_rows,
+)
 
 DEFAULT_ARGS = {
     "owner": "hpp",
@@ -30,32 +37,22 @@ DEFAULT_ARGS = {
 def batch_scoring_pipeline():
     @task(task_id="validate_inference_rows")
     def validate_inference_rows_task() -> dict:
-        from airflow_tasks.batch_scoring import validate_inference_rows
-
         return validate_inference_rows()
 
     @task(task_id="merge_demographics")
     def merge_demographics_task() -> str:
-        from airflow_tasks.batch_scoring import merge_inference_with_demographics
-
         return merge_inference_with_demographics()
 
     @task(task_id="engineer_features")
     def engineer_features_task(merged_csv_path: str) -> str:
-        from airflow_tasks.batch_scoring import engineer_batch_features
-
         return engineer_batch_features(merged_csv_path)
 
     @task(task_id="score_and_write_predictions")
     def score_task(merged_csv_path: str, feature_csv_path: str) -> dict:
-        from airflow_tasks.batch_scoring import load_model_score_and_write
-
         return load_model_score_and_write(merged_csv_path, feature_csv_path)
 
     @task(task_id="summarize_batch_run")
     def summarize_task(score_result: dict) -> dict:
-        from airflow_tasks.batch_scoring import summarize_batch_run
-
         return summarize_batch_run(score_result)
 
     validated = validate_inference_rows_task()

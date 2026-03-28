@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import ast
+import importlib.util
 from pathlib import Path
 
 import pytest
+from airflow_tasks.training import validate_training_raw_data
 
 DAG_NAMES = ("training_pipeline", "batch_scoring_pipeline", "monitoring_pipeline")
 
@@ -26,8 +28,6 @@ def test_validate_training_raw_data_task(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.chdir(project_root)
-    from airflow_tasks.training import validate_training_raw_data
-
     out = validate_training_raw_data()
     assert out["ok"] is True
     assert out["n_kc_rows"] > 0
@@ -41,8 +41,6 @@ def test_airflow_dag_modules_expose_dag() -> None:
             "Use Python 3.11–3.12 and: pip install -e '.[airflow]'"
         ),
     )
-    import importlib.util
-
     root = _project_root()
     for name in DAG_NAMES:
         path = root / "dags" / f"{name}.py"

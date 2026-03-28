@@ -4,11 +4,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import app.dependencies.containers as containers
 import pandas as pd
 import pytest
+from app.core.config import get_settings
 from app.main import app
 from app.schemas.prediction import _EXAMPLE_FULL, _EXAMPLE_MINIMAL
 from data_engineer.constants import FUTURE_UNSEEN_FILENAME
+from data_engineer.feature_engineering import get_final_feature_column_names
 from fastapi.testclient import TestClient
 
 FULL_PATH = "/api/v1/predict/full"
@@ -52,8 +55,6 @@ def test_predict_full_batch_shape_and_contract(
 def test_predict_minimal_matches_full_contract(
     api_client_with_local_model: TestClient,
 ) -> None:
-    from data_engineer.feature_engineering import get_final_feature_column_names
-
     r = api_client_with_local_model.post(MINIMAL_PATH, json={"rows": [_EXAMPLE_MINIMAL]})
     assert r.status_code == 200, r.text
     body = r.json()
@@ -69,9 +70,6 @@ def test_predict_minimal_extra_field_rejected(api_client_with_local_model: TestC
 
 
 def test_model_missing_returns_503(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
-    import app.dependencies.containers as containers
-    from app.core.config import get_settings
-
     monkeypatch.setenv("HPP_LOCAL_MODEL_PATH", str(tmp_path / "nonexistent.joblib"))
     monkeypatch.delenv("HPP_MLFLOW_TRACKING_URI", raising=False)
     monkeypatch.delenv("MLFLOW_TRACKING_URI", raising=False)
@@ -79,8 +77,6 @@ def test_model_missing_returns_503(monkeypatch: pytest.MonkeyPatch, tmp_path: Pa
     containers._prediction_service.cache_clear()
     containers._feature_service.cache_clear()
     containers._model_registry_service.cache_clear()
-
-    from app.main import app
 
     client = TestClient(app)
     r = client.post(FULL_PATH, json={"rows": [_EXAMPLE_FULL]})

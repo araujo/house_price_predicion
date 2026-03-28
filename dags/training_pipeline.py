@@ -9,6 +9,11 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 
 from airflow.decorators import dag, task
+from airflow_tasks.training import (
+    execute_training,
+    summarize_training_run,
+    validate_training_raw_data,
+)
 
 DEFAULT_ARGS = {
     "owner": "hpp",
@@ -29,20 +34,14 @@ DEFAULT_ARGS = {
 def training_pipeline():
     @task(task_id="validate_raw_data")
     def validate_raw_data() -> dict:
-        from airflow_tasks.training import validate_training_raw_data
-
         return validate_training_raw_data()
 
     @task(task_id="train_evaluate_register")
     def train_evaluate_register() -> dict:
-        from airflow_tasks.training import execute_training
-
         return execute_training()
 
     @task(task_id="summarize_run")
     def summarize_run(train_result: dict) -> dict:
-        from airflow_tasks.training import summarize_training_run
-
         return summarize_training_run(train_result)
 
     validated = validate_raw_data()

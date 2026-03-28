@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from unittest.mock import patch
 
+import joblib
 import numpy as np
 import pandas as pd
 import pytest
@@ -71,8 +72,6 @@ def test_model_registry_falls_back_to_local_when_mlflow_fails(
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
 ) -> None:
-    import joblib
-
     monkeypatch.setenv("HPP_MLFLOW_TRACKING_URI", "file:./mlruns")
     path = tmp_path / "local.joblib"
     dummy = Pipeline([("m", DummyRegressor(strategy="constant", constant=99.0))])

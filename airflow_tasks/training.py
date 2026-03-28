@@ -7,6 +7,7 @@ from typing import Any
 
 from data_engineer.ingestion import load_kc_house_dataframe, load_zipcode_demographics_dataframe
 from data_engineer.validation import run_training_pipeline_validations
+from model_trainer.train import run_training
 
 from airflow_tasks import config
 
@@ -50,8 +51,6 @@ def execute_training() -> dict[str, Any]:
 
     Delegates to :func:`model_trainer.train.run_training`.
     """
-    from model_trainer.train import run_training
-
     raw = config.raw_data_dir()
     out = config.model_output_dir()
     cfg = config.training_config_path()

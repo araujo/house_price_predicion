@@ -10,6 +10,13 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 
 from airflow.decorators import dag, task
+from airflow_tasks.monitoring_checks import (
+    run_data_drift_monitoring,
+    run_model_performance_monitoring,
+    run_prediction_drift_monitoring,
+    run_schema_and_quality_checks,
+    write_unified_monitoring_report,
+)
 
 DEFAULT_ARGS = {
     "owner": "hpp",
@@ -30,26 +37,18 @@ DEFAULT_ARGS = {
 def monitoring_pipeline():
     @task(task_id="schema_and_quality_checks")
     def schema_and_quality_task() -> dict:
-        from airflow_tasks.monitoring_checks import run_schema_and_quality_checks
-
         return run_schema_and_quality_checks()
 
     @task(task_id="data_drift_monitoring")
     def data_drift_task(quality_summary: dict) -> dict:
-        from airflow_tasks.monitoring_checks import run_data_drift_monitoring
-
         return run_data_drift_monitoring(quality_summary)
 
     @task(task_id="prediction_drift_monitoring")
     def prediction_drift_task() -> dict:
-        from airflow_tasks.monitoring_checks import run_prediction_drift_monitoring
-
         return run_prediction_drift_monitoring()
 
     @task(task_id="model_performance_monitoring")
     def model_performance_task() -> dict:
-        from airflow_tasks.monitoring_checks import run_model_performance_monitoring
-
         return run_model_performance_monitoring()
 
     @task(task_id="write_unified_monitoring_report")
@@ -59,8 +58,6 @@ def monitoring_pipeline():
         prediction_drift: dict,
         performance: dict,
     ) -> dict:
-        from airflow_tasks.monitoring_checks import write_unified_monitoring_report
-
         return write_unified_monitoring_report(quality, data_drift, prediction_drift, performance)
 
     q = schema_and_quality_task()

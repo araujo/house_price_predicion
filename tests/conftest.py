@@ -5,14 +5,15 @@ from __future__ import annotations
 from collections.abc import Generator
 from pathlib import Path
 
+import app.dependencies.containers as containers
 import pytest
+from app.core.config import get_settings
+from app.main import app
 from fastapi.testclient import TestClient
+from model_trainer.train import run_training
 
 
 def _clear_app_caches() -> None:
-    import app.dependencies.containers as containers
-    from app.core.config import get_settings
-
     get_settings.cache_clear()
     containers._prediction_service.cache_clear()
     containers._feature_service.cache_clear()
@@ -28,8 +29,6 @@ def project_root() -> Path:
 def trained_model_path(project_root: Path, tmp_path: Path) -> Generator[Path, None, None]:
     """Train a tiny baseline model into tmp_path for API integration tests."""
     _clear_app_caches()
-    from model_trainer.train import run_training
-
     out = tmp_path / "model_out"
     run_training(
         config_path=None,
@@ -56,9 +55,6 @@ def api_client_with_local_model(
     monkeypatch.setenv("HPP_FEATURE_REFERENCE_YEAR", "2015")
     monkeypatch.delenv("HPP_MLFLOW_TRACKING_URI", raising=False)
     monkeypatch.delenv("MLFLOW_TRACKING_URI", raising=False)
-
-    # Import app after env is set so settings + DI caches pick up env.
-    from app.main import app
 
     with TestClient(app) as client:
         yield client

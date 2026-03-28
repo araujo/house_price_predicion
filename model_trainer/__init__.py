@@ -5,6 +5,7 @@ from model_trainer.infer_signature import infer_signature_from_predictions
 from model_trainer.pipelines import build_estimator, build_supervised_pipeline
 from model_trainer.register import register_model_from_uri
 from model_trainer.split import train_val_split
+from model_trainer.train import run_training
 
 __all__ = [
     "build_estimator",
@@ -17,12 +18,3 @@ __all__ = [
     "run_training",
     "train_val_split",
 ]
-
-
-def __getattr__(name: str):
-    """Lazy import for heavy training entry (avoids import cycles / runpy warnings)."""
-    if name == "run_training":
-        from model_trainer.train import run_training
-
-        return run_training
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

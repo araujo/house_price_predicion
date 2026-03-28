@@ -8,6 +8,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import pytest
+from airflow_tasks.monitoring_checks import write_unified_monitoring_report
 from monitor.data_drift import (
     compute_data_drift_report,
     compute_psi,
@@ -121,8 +122,6 @@ def test_write_unified_monitoring_report_structure(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    from airflow_tasks.monitoring_checks import write_unified_monitoring_report
-
     rep = tmp_path / "mon"
     md = tmp_path / "md"
     monkeypatch.setenv("HPP_MONITOR_REPORTS_DIR", str(rep))

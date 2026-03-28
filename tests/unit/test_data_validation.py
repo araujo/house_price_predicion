@@ -1,7 +1,11 @@
 """Unit tests for data_engineer.validation."""
 
 import pandas as pd
-from data_engineer.constants import KC_HOUSE_COLUMNS, ZIPCODE_DEMOGRAPHICS_COLUMNS
+from data_engineer.constants import (
+    KC_HOUSE_COLUMNS,
+    MERGED_TRAINING_FEATURE_COLUMNS,
+    ZIPCODE_DEMOGRAPHICS_COLUMNS,
+)
 from data_engineer.validation import (
     normalize_zipcode_series,
     validate_demographics_schema,
@@ -51,8 +55,6 @@ def test_validate_nulls_on_price() -> None:
 
 
 def test_validate_merged_training_feature_presence_ok() -> None:
-    from data_engineer.constants import MERGED_TRAINING_FEATURE_COLUMNS
-
     data = {c: [0.0] for c in MERGED_TRAINING_FEATURE_COLUMNS}
     df = pd.DataFrame(data)
     rep = validate_merged_training_feature_presence(df)

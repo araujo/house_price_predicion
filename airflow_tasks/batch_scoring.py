@@ -13,12 +13,17 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
+from app.core.config import Settings
+from app.services.model_registry import ModelRegistryService
 from data_engineer.feature_engineering import (
     ZIPCODE_MODEL_CSV_DTYPE,
     prepare_model_input_for_prediction,
     transform_to_model_features,
 )
-from data_engineer.ingestion import load_future_unseen_examples_dataframe
+from data_engineer.ingestion import (
+    load_future_unseen_examples_dataframe,
+    load_zipcode_demographics_dataframe,
+)
 from data_engineer.preprocessing import merge_demographics_by_zipcode
 from data_engineer.validation import (
     run_inference_pipeline_validations,
@@ -51,8 +56,6 @@ def validate_inference_rows() -> dict[str, Any]:
 
 def merge_inference_with_demographics() -> str:
     """Merge zipcode demographics onto inference rows; validate merged columns."""
-    from data_engineer.ingestion import load_zipcode_demographics_dataframe
-
     raw = config.raw_data_dir()
     inference = load_future_unseen_examples_dataframe(raw)
     demo = load_zipcode_demographics_dataframe(raw)
@@ -84,9 +87,6 @@ def engineer_batch_features(merged_csv_path: str) -> str:
 
 def load_model_score_and_write(merged_csv_path: str, feature_csv_path: str) -> dict[str, Any]:
     """Load registry/local model, predict, write batch output CSV."""
-    from app.core.config import Settings
-    from app.services.model_registry import ModelRegistryService
-
     merged = pd.read_csv(merged_csv_path, dtype=ZIPCODE_MODEL_CSV_DTYPE)
     X = pd.read_csv(feature_csv_path, dtype=ZIPCODE_MODEL_CSV_DTYPE)
     raw = config.raw_data_dir()
